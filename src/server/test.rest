@@ -1,4 +1,4 @@
-POST http://localhost:3030/optimize HTTP/1.1
+POST https://popt-prod-winbox3.iran.liara.run/optimize HTTP/1.1
 content-type: application/json
 Accept: application/json
 
