@@ -9,7 +9,7 @@ license = "MIT OR Apache-2.0"
 edition = "2021"
 
 [dependencies]
-cut-optimizer-1d = { version = "0.1", features = ["serialize"] }
+cut-optimizer-1d = { version = "0.2.2", features = ["serialize"] }
 tokio = { version = "1", features = ["full"] }
 hyper = { version = "0.14", features = ["full"] }
 tower = { version = "0.4", features = ["full"] }

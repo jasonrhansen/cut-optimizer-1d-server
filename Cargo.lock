@@ -314,13 +314,14 @@ dependencies = [
 
 [[package]]
 name = "cut-optimizer-1d"
-version = "0.1.0"
+version = "0.2.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b8f7d18c1ac13576fa9dd4569e3ce986a44ba25f02d1dfde0b1526bb61ecd1b3"
+checksum = "7f22abab7c0819642930cebbbb36c5def583772b3fe22596a7502d47e6e6c3c6"
 dependencies = [
  "fnv",
  "rand",
  "serde",
+ "smallvec",
 ]
 
 [[package]]
@@ -1257,9 +1258,9 @@ checksum = "9def91fd1e018fe007022791f865d0ccc9b3a0d5001e01aabb8b40e46000afb5"
 
 [[package]]
 name = "smallvec"
-version = "1.7.0"
+version = "1.11.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1ecab6c735a6bb4139c0caafd0cc3635748bbb3acf4550e8138122099251f309"
+checksum = "62bb4feee49fdd9f707ef802e22365a35de4b7b299de4763d44bfea899442ff9"
 
 [[package]]
 name = "socket2"
