@@ -1,39 +1,36 @@
-FROM ekidd/rust-musl-builder:stable as builder
+#======================== builder
+FROM rust:latest as builder
+WORKDIR /usr/src/cut-optimizer-1d-server
+COPY . .
 
-RUN USER=root cargo new --bin cut-optimizer-1d-server
-WORKDIR ./cut-optimizer-1d-server
-COPY ./Cargo.lock ./Cargo.lock
-COPY ./Cargo.toml ./Cargo.toml
-RUN cargo build --release
-RUN rm src/*.rs
+## Install target platform (Cross-Compilation) --> Needed for Alpine
+RUN rustup target add x86_64-unknown-linux-musl
+ENV RUSTFLAGS='-C linker=x86_64-linux-gnu-gcc'
 
-ADD . ./
-
-RUN rm ./target/x86_64-unknown-linux-musl/release/deps/cut_optimizer_1d_server*
-RUN cargo build --release
+RUN cargo build --target x86_64-unknown-linux-musl --release
+# RUN cargo install . --release
 
 
+# ======================= production
 FROM alpine:latest
-
 ARG APP=/usr/src/app
-
-EXPOSE 3030
-
-ENV TZ=Etc/UTC \
-    APP_USER=appuser
-
-RUN addgroup -S $APP_USER \
-    && adduser -S -g $APP_USER $APP_USER
-
-RUN apk update \
-    && apk add --no-cache ca-certificates tzdata \
-    && rm -rf /var/cache/apk/*
-
-COPY --from=builder /home/rust/src/cut-optimizer-1d-server/target/x86_64-unknown-linux-musl/release/cut-optimizer-1d-server ${APP}/cut-optimizer-1d-server
-
-RUN chown -R $APP_USER:$APP_USER ${APP}
-
-USER $APP_USER
 WORKDIR ${APP}
 
-CMD ["./cut-optimizer-1d-server", "-vv"]
+ENV TZ=TEH/UTC \
+  APP_USER=appuser
+
+RUN addgroup -S $APP_USER \
+  && adduser -S -g $APP_USER $APP_USER
+
+RUN apk update \
+  && apk add --no-cache ca-certificates tzdata postgresql-client bash openssl libgcc libstdc++ ncurses-libs libc6-compat gcompat\
+  && rm -rf /var/cache/apk/* 
+
+# COPY --from=builder /usr/local/cargo/bin/cut-optimizer-1d-server /usr/local/bin/cut-optimizer-1d-server
+COPY --from=builder /usr/src/cut-optimizer-1d-server/target/release/ /usr/local/bin/
+RUN ls /usr/local/bin/
+RUN chown -R $APP_USER:$APP_USER ${APP}
+USER $APP_USER
+
+EXPOSE 3030
+CMD [ "cut-optimizer-1d-server", "-vv" ]

@@ -1,8 +1,9 @@
 use axum::error_handling::HandleErrorLayer;
-use axum::{extract, routing::post, Json, Router};
+// use axum::handler::HandlerWithoutStateExt;
+use axum::{extract, routing::post, Json, Router, Server};
 use cut_optimizer_1d::{CutPiece, Optimizer, Solution, StockPiece};
 use http::{Method, StatusCode, Uri};
-use hyper::Body;
+// use hyper::Body;
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 use std::net::SocketAddr;
@@ -21,13 +22,13 @@ mod tests;
 /// Run optimizer server
 pub(crate) async fn serve(socket_addr: SocketAddr, opt: &Opt) {
     // run it with hyper on localhost:3000
-    hyper::Server::bind(&socket_addr)
+    Server::bind(&socket_addr)
         .serve(app(opt).into_make_service())
         .await
         .unwrap();
 }
 
-fn app(opt: &Opt) -> Router<Body> {
+fn app(opt: &Opt) -> axum::routing::Router {
     let middleware_stack = ServiceBuilder::new()
         .layer(HandleErrorLayer::new(handle_error))
         // Return an error after 30 seconds

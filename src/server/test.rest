@@ -1,0 +1,33 @@
+POST https://popt-prod-winbox3.iran.liara.run/optimize HTTP/1.1
+content-type: application/json
+Accept: application/json
+
+{
+  "randomSeed": 1,
+  "cutWidth": 0,
+  "allowMixedStockSizes": true,
+  "stockPieces": [
+      {
+          "length": 96,
+          "price": 100,
+          "quantity": 10 
+      },
+      {
+          "length": 120,
+          "price": 120,
+          "quantity": 10
+      }
+  ],
+  "cutPieces": [
+      {
+          "externalId": 1,
+          "length": 30,
+          "quantity": 2
+      },
+      {
+          "externalId": 2,
+          "length": 100,
+          "quantity": 3
+      }
+  ]
+}
